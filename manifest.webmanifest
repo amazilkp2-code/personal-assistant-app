@@ -1,0 +1,19 @@
+{
+  "name": "My Personal Assistant",
+  "short_name": "My Assistant",
+  "description": "Private-first bilingual daily assistant",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f7f5",
+  "theme_color": "#123c35",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "lang": "en"
+}

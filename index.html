@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#123c35">
+<meta name="description" content="Your private bilingual personal assistant for routines, study, health and goals.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>My Personal Assistant</title>
+<style>
+:root{--bg:#f4f7f5;--card:#fff;--ink:#172b27;--muted:#647570;--brand:#155e50;--brand2:#dff3e9;--line:#dce7e1;--warn:#fff1d6;--shadow:0 8px 24px #123c350d}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{background:linear-gradient(135deg,#123c35,#1e7662);color:white;padding:22px 18px 20px;border-radius:0 0 24px 24px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{font-size:12px;letter-spacing:.1em;text-transform:uppercase;opacity:.85}.date{font-size:13px;opacity:.9}.greet{font-size:25px;font-weight:750;margin:9px 0 3px}.sub{opacity:.88;font-size:14px}
+.wrap{max-width:760px;margin:auto;padding:14px 14px 94px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:-1px}.stat,.card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:14px;box-shadow:var(--shadow)}.stat b{font-size:23px;display:block}.stat span{font-size:12px;color:var(--muted)}
+.section{margin:20px 0 9px;font-size:18px;font-weight:750;display:flex;justify-content:space-between;align-items:center}.small{font-size:12px;color:var(--muted);font-weight:500}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.tile{border:1px solid var(--line);border-radius:16px;padding:14px;background:var(--card);text-align:left;color:var(--ink);min-height:102px;cursor:pointer}.tile .emoji{font-size:23px;display:block;margin-bottom:6px}.tile b{display:block}.tile span{font-size:12px;color:var(--muted)}
+button,input,select,textarea{font:inherit}button{cursor:pointer}.primary,.secondary,.danger{border:0;border-radius:12px;padding:11px 14px;font-weight:650}.primary{background:var(--brand);color:white}.secondary{background:var(--brand2);color:var(--brand)}.danger{background:#fde7e5;color:#9e2f2a}.full{width:100%}.row{display:flex;align-items:center;gap:9px}.between{justify-content:space-between}.field{margin:10px 0}.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:5px}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:11px;padding:11px;background:#fff;color:var(--ink)}.field textarea{min-height:84px;resize:vertical}.checklist{display:grid;gap:8px}.check{display:flex;align-items:center;gap:10px;padding:10px 11px;background:#fff;border:1px solid var(--line);border-radius:12px}.check input{width:19px;height:19px;accent-color:var(--brand)}.check .desc{flex:1}.check small{display:block;color:var(--muted);font-size:12px}.progress{height:8px;border-radius:10px;background:#e5eee9;overflow:hidden;margin:10px 0}.progress i{display:block;height:100%;background:#2b9a75;width:0;transition:width .2s}.pill{background:#edf5f1;color:var(--brand);border-radius:99px;padding:4px 9px;font-size:12px}
+nav{position:fixed;bottom:0;left:0;right:0;background:#fffffff2;backdrop-filter:blur(12px);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:8px 4px calc(8px + env(safe-area-inset-bottom));z-index:10}nav button{border:0;background:transparent;color:var(--muted);font-size:11px;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:58px}nav button span{font-size:21px}nav button.active{color:var(--brand);font-weight:750}
+.view{display:none}.view.active{display:block}.hidden{display:none!important}.note{font-size:13px;color:var(--muted);background:#eef5f1;border-radius:12px;padding:11px}.warning{background:var(--warn);padding:12px;border-radius:12px;font-size:13px}.taskline{display:flex;gap:9px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line)}.taskline:last-child{border-bottom:0}.taskline input{margin-top:4px;accent-color:var(--brand)}.taskline div{flex:1}.taskline small{display:block;color:var(--muted)}.report{white-space:pre-wrap;background:#f7faf8;border:1px solid var(--line);border-radius:12px;padding:12px;font-size:13px}.foodrow{display:grid;grid-template-columns:1fr 72px 72px;gap:6px;align-items:center}.foodrow input{min-width:0}.footer{text-align:center;font-size:11px;color:var(--muted);padding:18px}
+@media(min-width:600px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.wrap{padding-top:20px}.greet{font-size:30px}}
+</style>
+</head>
+<body>
+<header>
+ <div class="top"><div class="brand">MY PERSONAL ASSISTANT</div><div class="date" id="todayDate"></div></div>
+ <div class="greet" id="greeting">നമസ്കാരം! Let's make today count.</div>
+ <div class="sub">നിന്റെ ജീവിതം, നിന്റെ വേഗത്തിൽ • One step at a time</div>
+</header>
+<main class="wrap">
+<section class="view active" id="homeView">
+ <div class="stats">
+  <div class="stat"><b id="doneStat">0/3</b><span>Top tasks / പ്രധാന ജോലികൾ</span></div>
+  <div class="stat"><b id="prayerStat">0/5</b><span>Prayers / നമസ്കാരം</span></div>
+  <div class="stat"><b id="studyStat">0m</b><span>Study / പഠനം</span></div>
+ </div>
+ <div class="section">ഇന്നത്തെ പ്രധാന 3 കാര്യങ്ങൾ <span class="small">Top 3</span></div>
+ <div class="card">
+  <div id="topTasks" class="checklist"></div>
+  <div class="progress"><i id="taskProgress"></i></div>
+  <div class="row between"><span class="small" id="taskProgressText">0% complete</span><button class="secondary" onclick="openView('tracker')">Track day →</button></div>
+ </div>
+ <div class="section">Quick actions / പെട്ടെന്ന് രേഖപ്പെടുത്തുക</div>
+ <div class="grid">
+  <button class="tile" onclick="openView('tracker')"><span class="emoji">🕌</span><b>Prayer & habits</b><span>നമസ്കാരം, ഖുർആൻ, ശീലങ്ങൾ</span></button>
+  <button class="tile" onclick="openView('health')"><span class="emoji">🥗</span><b>Food & health</b><span>ഭക്ഷണം, വെള്ളം, നടത്തം</span></button>
+  <button class="tile" onclick="openView('study')"><span class="emoji">📚</span><b>Study & skills</b><span>B.Com CA, English, skills</span></button>
+  <button class="tile" onclick="openView('coach')"><span class="emoji">✨</span><b>AI Coach</b><span>Daily reflection & next steps</span></button>
+ </div>
+ <div class="section">Next step / ഇനി ചെയ്യേണ്ടത്</div>
+ <div class="card"><b id="nextStep">Start with your first prayer or one focused 25-minute study session.</b><p class="small">എല്ലാം ഒരുമിച്ച് ചെയ്യേണ്ട. അടുത്ത ചെറിയ ചുവടു മാത്രം.</p><button class="primary full" onclick="openView('report')">End-of-day report / റിപ്പോർട്ട്</button></div>
+ <div class="footer">Private-first prototype • Data saved on this device</div>
+</section>
+
+<section class="view" id="trackerView">
+ <div class="section">Daily tracker / ദിനചര്യ <span class="small" id="trackerDate"></span></div>
+ <div class="card">
+  <b>Prayer tracker / നമസ്കാരം</b><p class="small">Prayer times are local estimates. Verify with your local mosque.</p>
+  <div class="checklist" id="prayerList"></div>
+  <div class="field"><label>Qur'an reading / ഖുർആൻ (minutes)</label><input id="quranMins" type="number" min="0" max="600" placeholder="e.g. 10"></div>
+ </div>
+ <div class="card" style="margin-top:10px">
+  <b>Daily habits / ദിവസശീലങ്ങൾ</b>
+  <div id="habitList"></div>
+  <div class="field"><label>Sleep time / ഉറങ്ങിയ സമയം</label><input id="sleepTime" type="time"></div>
+  <div class="field"><label>Wake time / എഴുന്നേറ്റ സമയം</label><input id="wakeTime" type="time"></div>
+  <button class="primary full" onclick="saveTracker()">Save tracker / സേവ് ചെയ്യുക</button>
+ </div>
+</section>
+
+<section class="view" id="healthView">
+ <div class="section">Food & health / ഭക്ഷണവും ആരോഗ്യവും</div>
+ <div class="card">
+  <b>Food log / ഭക്ഷണ രേഖ</b>
+  <p class="small">Enter each food item and estimated grams. Nutrition is a rough estimate, not medical advice.</p>
+  <div id="foodRows"></div>
+  <button class="secondary" onclick="addFoodRow()">+ Add food / ഭക്ഷണം ചേർക്കുക</button>
+  <div class="field"><label>Meal time / ഭക്ഷണ സമയം</label><select id="mealType"><option>Breakfast / പ്രഭാതഭക്ഷണം</option><option>Lunch / ഉച്ചഭക്ഷണം</option><option>Evening meal / വൈകുന്നേരം</option><option>Dinner / രാത്രി ഭക്ഷണം</option></select></div>
+  <button class="primary full" onclick="saveFood()">Save food / ഭക്ഷണം സേവ് ചെയ്യുക</button>
+  <div id="foodSummary" class="note" style="margin-top:10px">Today's food summary appears here.</div>
+ </div>
+ <div class="card" style="margin-top:10px">
+  <b>Body & activity / ശരീരവും പ്രവർത്തനവും</b>
+  <div class="field"><label>Weight kg / ഭാരം</label><input id="weight" type="number" step="0.1" placeholder="e.g. 98"></div>
+  <div class="field"><label>Walking minutes / നടത്തം (മിനിറ്റ്)</label><input id="walkMins" type="number" min="0" placeholder="e.g. 20"></div>
+  <div class="field"><label>Water glasses / വെള്ളം (ഗ്ലാസ്)</label><input id="water" type="number" min="0" placeholder="e.g. 7"></div>
+  <button class="primary full" onclick="saveHealth()">Save health / സേവ് ചെയ്യുക</button>
+ </div>
+</section>
+
+<section class="view" id="studyView">
+ <div class="section">Study & future / പഠനവും ഭാവിയും</div>
+ <div class="card">
+  <b>Study session / പഠന സെഷൻ</b>
+  <div class="field"><label>Subject / വിഷയം</label><select id="subject"><option>B.Com CA / Accounting</option><option>Business Studies / Management</option><option>English speaking</option><option>Arabic</option><option>Computer / Technology</option><option>Career / CA / CMA</option><option>Business / AI content</option><option>Other</option></select></div>
+  <div class="field"><label>Minutes / മിനിറ്റ്</label><input id="studyMins" type="number" min="0" placeholder="25"></div>
+  <div class="field"><label>What did you do? / എന്താണ് പഠിച്ചത്?</label><textarea id="studyNotes" placeholder="e.g. revised journal entries"></textarea></div>
+  <button class="primary full" onclick="saveStudy()">Save session / സേവ് ചെയ്യുക</button>
+ </div>
+ <div class="card" style="margin-top:10px">
+  <b>Weekly focus / ഈ ആഴ്ച</b>
+  <div class="checklist" id="skillHabits"></div>
+ </div>
+</section>
+
+<section class="view" id="coachView">
+ <div class="section">AI Coach / വ്യക്തിഗത സഹായി</div>
+ <div class="warning">Version 1 uses private on-device rules and your saved logs. It does not call a cloud AI model yet. You can copy the report into ChatGPT for a deeper AI analysis without paying for an API.</div>
+ <div class="card" style="margin-top:10px">
+  <b>How are you feeling? / നിനക്ക് ഇന്ന് എങ്ങനെയുണ്ട്?</b>
+  <div class="field"><select id="mood"><option value="okay">Okay / സാധാരണ</option><option value="good">Good / നല്ലത്</option><option value="tired">Tired / ക്ഷീണം</option><option value="stressed">Stressed / സമ്മർദ്ദം</option></select></div>
+  <div class="field"><label>Biggest difficulty / ഇന്നത്തെ ബുദ്ധിമുട്ട്</label><textarea id="difficulty" placeholder="What made today hard?"></textarea></div>
+  <button class="primary full" onclick="generateCoach()">Generate my next steps / നിർദേശങ്ങൾ</button>
+  <div id="coachOutput" class="report hidden" style="margin-top:10px"></div>
+ </div>
+ <div class="card" style="margin-top:10px">
+  <b>AI handoff prompt / ChatGPT-യിൽ വിശകലനം ചെയ്യാൻ</b>
+  <p class="small">Copy today's report and paste it into ChatGPT to receive a more detailed plan.</p>
+  <button class="secondary full" onclick="copyReportPrompt()">Copy report + AI prompt</button>
+ </div>
+</section>
+
+<section class="view" id="reportView">
+ <div class="section">Daily report / ദിവസ റിപ്പോർട്ട്</div>
+ <div class="card">
+  <p class="small">Your report is built from the information you recorded today.</p>
+  <div id="reportText" class="report">No report generated yet.</div>
+  <div class="row" style="margin-top:10px"><button class="primary" onclick="renderReport()">Refresh report</button><button class="secondary" onclick="copyDailyReport()">Copy report</button></div>
+ </div>
+ <div class="card" style="margin-top:10px">
+  <b>Reflection / ദിവസാവസാന ചിന്ത</b>
+  <div class="field"><label>One thing that went well / നന്നായി ചെയ്ത ഒരു കാര്യം</label><textarea id="win" placeholder="Small progress counts"></textarea></div>
+  <div class="field"><label>Change for tomorrow / നാളെ മാറ്റേണ്ടത്</label><textarea id="tomorrowChange" placeholder="Make tomorrow easier"></textarea></div>
+  <button class="primary full" onclick="saveReflection()">Save reflection / സേവ് ചെയ്യുക</button>
+ </div>
+ <div class="card" style="margin-top:10px">
+  <b>Backup & privacy / ബാക്കപ്പ്, സ്വകാര്യത</b>
+  <p class="small">Data stays in this browser on this device. Clearing browser data can erase it. Export a backup regularly.</p>
+  <div class="row"><button class="secondary" onclick="exportData()">Export backup</button><label class="secondary" style="display:inline-block;padding:11px 14px;border-radius:12px;cursor:pointer">Import backup<input type="file" accept="application/json" style="display:none" onchange="importData(event)"></label></div>
+  <p><button class="danger" onclick="clearToday()">Clear today's entries</button></p>
+ </div>
+</section>
+</main>
+<nav>
+ <button class="active" data-view="home" onclick="openView('home')"><span>⌂</span>Home</button>
+ <button data-view="tracker" onclick="openView('tracker')"><span>✓</span>Habits</button>
+ <button data-view="health" onclick="openView('health')"><span>♡</span>Health</button>
+ <button data-view="study" onclick="openView('study')"><span>▤</span>Study</button>
+ <button data-view="coach" onclick="openView('coach')"><span>✦</span>AI Coach</button>
+</nav>
+<script src="app.js"></script>
+</body>
+</html>
