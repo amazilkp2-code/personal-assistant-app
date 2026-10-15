@@ -1,12 +1,14 @@
 {
   "name": "My Personal Assistant",
   "short_name": "My Assistant",
-  "description": "Private-first bilingual daily assistant",
+  "description": "Personal dashboard for prayer, study, health, habits and goals",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#f4f7f5",
+  "orientation": "portrait",
+  "background_color": "#f3f6f4",
   "theme_color": "#123c35",
+  "lang": "en",
   "icons": [
     {
       "src": "icon.svg",
@@ -14,6 +16,5 @@
       "type": "image/svg+xml",
       "purpose": "any maskable"
     }
-  ],
-  "lang": "en"
+  ]
 }
